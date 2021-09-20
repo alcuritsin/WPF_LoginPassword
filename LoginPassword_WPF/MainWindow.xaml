@@ -6,78 +6,73 @@
         xmlns:local="clr-namespace:LoginPassword_WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    
+
     <Window.Resources>
-        
+
         <Style x:Key="Style_Font">
             <Setter Property="Control.FontSize" Value="15" />
         </Style>
-        
+
         <Style x:Key="Style_Button" BasedOn="{StaticResource ResourceKey= Style_Font}">
             <Setter Property="Control.Margin" Value="5" />
             <Setter Property="Control.Padding" Value="5" />
         </Style>
-        
+
         <Style x:Key="Style_TextInput" BasedOn="{StaticResource ResourceKey=Style_Font}">
             <Setter Property="Control.Width" Value="150" />
             <Setter Property="Control.Height" Value="30" />
             <Setter Property="Control.Padding" Value="5" />
             <Setter Property="Control.Margin" Value="5" />
         </Style>
-        
+
         <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource Style_TextInput}">
-            <Setter Property="Tag" Value="True"/>
-             <!-- Обработать наличие какого-либо значения в PasswordBox без кода на C# не получается...  -->
-            <EventSetter Event="PasswordChanged" Handler="OnPasswordChaged"/>
+            <Setter Property="Tag" Value="True" />
+            <!-- Обработать наличие какого-либо значения в PasswordBox без кода на C# не получается...  -->
+            <EventSetter Event="PasswordChanged" Handler="OnPasswordChaged" />
             <!-- Эти тригеры не отрабатывают... Вообще...-->
             <Style.Triggers>
                 <DataTrigger Value="" Binding="{Binding Password, RelativeSource={RelativeSource Self}}">
-                    <Setter Property="Tag" Value="False"/>
+                    <Setter Property="Tag" Value="False" />
                 </DataTrigger>
                 <DataTrigger Value="{x:Null}" Binding="{Binding Password, RelativeSource={RelativeSource Self}}">
-                    <Setter Property="Tag" Value="False"/>
+                    <Setter Property="Tag" Value="False" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
+
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource Style_TextInput}">
-            <Setter Property="Tag" Value="True"/>
+            <Setter Property="Tag" Value="True" />
             <Style.Triggers>
                 <DataTrigger Value="" Binding="{Binding Text, RelativeSource={RelativeSource Self}}">
-                    <Setter Property="Tag" Value="False"/>
+                    <Setter Property="Tag" Value="False" />
                 </DataTrigger>
                 <DataTrigger Value="{x:Null}" Binding="{Binding Text, RelativeSource={RelativeSource Self}}">
-                    <Setter Property="Tag" Value="False"/>
+                    <Setter Property="Tag" Value="False" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
-        <Style x:Key="Style_ButtonActiv" BasedOn="{StaticResource Style_Button}">
+
+        <Style x:Key="Style_ButtonActiv" TargetType="Button" BasedOn="{StaticResource Style_Button}">
+            <Setter Property="IsEnabled" Value="True" />
             <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <!-- По отдельности каждое условие отрабатывает четко -->
-                        <!-- Но вместе не работают -->
-                        <!-- Решение найти не получается. -->
-                        
-                        <!-- <Condition Binding="{Binding ElementName=PasswordBox_Password,Path=Tag}" Value="False"/> -->
-                        <Condition Binding="{Binding ElementName=TextBox_Login,Path=Tag}" Value="False"/>
-                        <Condition Binding="{Binding ElementName=TextBox_Password,Path=Tag}" Value="False"/>
-                        
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Button.IsEnabled" Value="False"></Setter>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
+                <DataTrigger Binding="{Binding ElementName=TextBox_Login, Path=Tag}" Value="False">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=TextBox_Password, Path=Tag}" Value="False">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=PasswordBox_Password, Path=Tag}" Value="False">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
     </Window.Resources>
-    
+
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
-        <Label Content="Login and Password" HorizontalAlignment="Center"/>
-        
+        <Label Content="Login and Password" HorizontalAlignment="Center" />
+
         <StackPanel Orientation="Horizontal">
             <Grid>
                 <Grid.RowDefinitions>
@@ -95,22 +90,22 @@
                 <Label Grid.Row="1" Grid.Column="0" Content="Пароль:" />
                 <Label Grid.Row="2" Grid.Column="0" Content="PasswordBox:" />
 
-                <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox_Login"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBox_Password"/>
-                
-                <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="PasswordBox_Password"/>
-                
-                <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding ElementName=TextBox_Login,Path=Tag}"/>
-                <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding ElementName=TextBox_Password,Path=Tag}"/>
-                <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding ElementName=PasswordBox_Password,Path=Tag}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBox_Login" />
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBox_Password" />
+
+                <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="PasswordBox_Password" />
+
+                <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding ElementName=TextBox_Login,Path=Tag}" />
+                <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding ElementName=TextBox_Password,Path=Tag}" />
+                <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding ElementName=PasswordBox_Password,Path=Tag}" />
 
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Отправить" Style="{StaticResource Style_ButtonActiv}"/>
-            <Button Content="Очистить" Style="{StaticResource Style_Button}"/>
+            <Button x:Name="ButtonSend" Content="Отправить" Style="{StaticResource Style_ButtonActiv}" />
+            <Button Content="Очистить" Style="{StaticResource Style_Button}" />
         </StackPanel>
-        
-        
+
+
     </StackPanel>
 </Window>
